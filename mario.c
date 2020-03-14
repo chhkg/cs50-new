@@ -1,3 +1,5 @@
+//Printing a right-aligned pyramid with n rows
+
 #include <cs50.h>
 #include <stdio.h>
 

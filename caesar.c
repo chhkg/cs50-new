@@ -16,8 +16,8 @@ int main(int argc, string argv[])
     {
         if (! isdigit(argv[1][i]))
         {
-        printf("Usage: ./caesar\n");
-        return 1;
+            printf("Usage: ./caesar\n");
+            return 1;
         }
     }
 

@@ -30,11 +30,11 @@ int main(int argc, string argv[])
     {
         if (isalpha(plaintext[j]) && isupper(plaintext[j]))
         {
-            printf("%c", (plaintext[j] - 64 + k) % 26 + 64);
+            printf("%c", ((plaintext[j] - 64 + k) % 26 + 64));
         }
-        if (isalpha(plaintext[j]) && islower(plaintext[j]))
+        else if (isalpha(plaintext[j]) && islower(plaintext[j]))
         {
-            printf("%c", (plaintext[j] - 96 + k) % 26 + 96);
+            printf("%c", ((plaintext[j] - 96 + k) % 26 + 96));
         }
         else
         {

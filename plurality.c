@@ -67,16 +67,13 @@ int main(int argc, string argv[])
 bool vote(string name)
 {
     // TODO
-    for (int j = 0; j < MAX; j++)
+    for (int j = 0; j < candidate_count; j++)
     {
         if (strcmp(name, candidates[j].name) == 0)
         {
             candidates[j].votes++;
+            printf("%s get %i votes\n", candidates[j].name, candidates[j].votes);
             return true;
-        }
-        else
-        {
-            return false;
         }
     }
     return false;

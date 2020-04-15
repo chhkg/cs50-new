@@ -5,13 +5,6 @@
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width])
 {
-/*
-    int n = round((image[0][0].rgbtRed + image[0][0].rgbtGreen + image[0][0].rgbtBlue) / 3);
-    printf("R is %i, Green is %i, Blue is %i, Average is %i\n", image[0][0].rgbtRed, image[0][0].rgbtGreen, image[0][0].rgbtBlue, n);
-    image[0][0].rgbtRed = image[0][0].rgbtGreen = image[0][0].rgbtBlue = n;
-    printf("R is %i, Green is %i, Blue is %i, Average is %i\n", image[0][0].rgbtRed, image[0][0].rgbtGreen, image[0][0].rgbtBlue, n);
-*/
-
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -196,25 +189,6 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             image[i][j].rgbtRed = round(bRed / pixel);
             image[i][j].rgbtGreen = round(bGreen / pixel);
             image[i][j].rgbtBlue = round(bBlue / pixel);
-
-/*
-            {
-                int bRed = round((image[i][j].rgbtRed + image[i][j + 1].rgbtRed
-                + image[i + 1][j + 1].rgbtRed + image[i + 1][j].rgbtRed) / 4)
-            }
-
-
-            if (i != 0 && j != 0)
-            {
-                int bRed = round((image[i][j].rgbtRed + image[i][j + 1].rgbtRed + image[i][j - 1].rgbtRed
-                + image[i - 1][j + 1].rgbtRed + image[i - 1][j].rgbtRed + image[i - 1][j - 1].rgbtRed
-                + image[i + 1][j + 1].rgbtRed + image[i + 1][j].rgbtRed + image[i + 1][j - 1].rgbtRed) / 9)
-            }
-            else if (i = 0 && j != 0)
-            {
-                int bRed = round((image[i][j].rgbtRed + image[i - 1][j + 1].rgbtRed + image[i - 1][j].rgbtRed + image[i - 1][j - 1].rgbtRed + image[i][j + 1].rgbtRed + image[i][j - 1].rgbtRed + image[i + 1][j + 1].rgbtRed + image[i + 1][j].rgbtRed + image[i + 1][j - 1].rgbtRed) / 9)
-            }
-*/
         }
     }
     return;

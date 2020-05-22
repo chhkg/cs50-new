@@ -21,7 +21,7 @@ node;
 const unsigned int N = 5381;
 
 // Set initial global variable of the number of words in dictionary
-int dword_count = 0;
+int word_count = 0;
 
 // Hash table
 node *table[N];
@@ -32,7 +32,7 @@ bool check(const char *word)
     node *cursor = table[hash(word)];
     while (cursor != NULL)
     {
-        if (int strcasecmp(cursor, word) == 0)
+        if (strcasecmp(cursor->word, word) == 0)
         {
             return true;
         }
@@ -69,9 +69,9 @@ bool load(const char *dictionary)
     }
 
     // read every string from the file
-    char dword[LENGTH+1];
+    char word[LENGTH+1];
 
-    while (fscanf (file, "%s", dword)!= EOF)
+    while (fscanf (file, "%s", word)!= EOF)
     {
         // allocate memory for words
         node *new_node = malloc(sizeof(node));
@@ -80,12 +80,13 @@ bool load(const char *dictionary)
         if (new_node == NULL)
         {
             unload();
+            free(new_node);
             return false;
         }
         else
         {
-            strcpy(new_node->word, dword);
-            dword_count++;
+            strcpy(new_node->word, word);
+            word_count++;
 
             // insert dictionary words into hash table at that location
             int h = hash(new_node->word);
@@ -109,13 +110,13 @@ bool load(const char *dictionary)
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
-    return dword_count;
+    return word_count;
 }
 
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    for (int h = 0, h < N, h++)
+    for (int h = 0; h < N; h++)
     {
         node *cursor = table[h];
 

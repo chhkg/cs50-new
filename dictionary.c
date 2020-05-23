@@ -101,6 +101,20 @@ bool load(const char *dictionary)
                 new_node->next = table[h];
                 table[h] = new_node;
             }
+/*
+    for (int h = 0; h < N; h++)
+    {
+        node *new_node = table[h];
+
+        while (new_node != NULL)
+        {
+            node *tmp2 = new_node;
+            new_node = new_node->next;
+            free(tmp2);
+        }
+        free(new_node);
+    }
+*/
         }
     }
     fclose(file);
@@ -118,15 +132,15 @@ bool unload(void)
 {
     for (int h = 0; h < N; h++)
     {
-        node *cursor = table[h];
+        node *word = table[h];
 
-        while (cursor != NULL)
+        while (word != NULL)
         {
-            node *tmp = cursor;
-            cursor = cursor->next;
+            node *tmp = word;
+            word = word->next;
             free(tmp);
         }
-        free(cursor);
+        free(word);
     }
     return true;
 }

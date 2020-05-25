@@ -18,7 +18,7 @@ typedef struct node
 node;
 
 // Number of buckets in hash table
-const unsigned int N = 5381;
+const unsigned int N = 65536;
 
 // Set initial global variable of the number of words in dictionary
 int word_count = 0;
@@ -45,15 +45,13 @@ bool check(const char *word)
 }
 
 // Hashes word to a number
-// reference: https://stackoverflow.com/questions/7666509/hash-function-for-string
+//reference: https://www.reddit.com/r/cs50/comments/1x6vc8/pset6_trie_vs_hashtable/
 unsigned int hash(const char *word)
 {
-    unsigned long hash = 5381;
-    int c = 0;
-
-    while (c == *word++)
+    unsigned int hash = 0;
+    for (int i = 0, n =strlen(word); i < n; i++)
     {
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+        hash = (hash << 2) ^ word[i];
     }
     return hash % N;
 }

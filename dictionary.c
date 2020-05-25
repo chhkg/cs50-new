@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cs50.h>
+#include <ctype.h>
 
 #include "dictionary.h"
 
@@ -30,6 +31,7 @@ node *table[N];
 bool check(const char *word)
 {
     node *cursor = table[hash(word)];
+
     while (cursor != NULL)
     {
         if (strcasecmp(cursor->word, word) == 0)
@@ -45,6 +47,8 @@ bool check(const char *word)
 }
 
 // Hashes word to a number
+
+/*
 //reference: https://www.reddit.com/r/cs50/comments/1x6vc8/pset6_trie_vs_hashtable/
 unsigned int hash(const char *word)
 {
@@ -54,6 +58,20 @@ unsigned int hash(const char *word)
         hash = (hash << 2) ^ word[i];
     }
     return hash % N;
+}
+*/
+
+// reference: https://stackoverflow.com/questions/7666509/hash-function-for-string
+unsigned int hash(const char *word)
+{
+    unsigned long hash = 5381;
+    int c = 0;
+
+    while ((c = *word++))
+    {
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+    }
+    return hash;
 }
 
 // Loads dictionary into memory, returning true if successful else false

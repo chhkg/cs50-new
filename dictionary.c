@@ -19,7 +19,7 @@ typedef struct node
 node;
 
 // Number of buckets in hash table
-const unsigned int N = 65536;
+const unsigned int N = 200000;
 
 // Set initial global variable of the number of words in dictionary
 int word_count = 0;
@@ -30,34 +30,11 @@ node *table[N];
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    /*
-    char *lower_word = malloc(sizeof(strlen(word) + 1));
-    if (malloc(sizeof(strlen(word))) == NULL)
-    {
-        unload();
-        return false;
-    }
-    else
-    {
-        for (int i = 0; i < (strlen(word)); i++)
-        {
-            if (isupper(word[i]))
-            {
-                lower_word[i] = tolower(word[i]);
-            }
-            else
-            {
-                lower_word[i] = word[i];
-            }
-        }
-    }
-    */
     char lower_word[LENGTH + 1];
-//    const char *lower_word = word;
     for (int i = 0; i < (strlen(word) + 1); i++)
-        {
-            lower_word[i] = tolower(word[i]);
-        }
+    {
+        lower_word[i] = tolower(word[i]);
+    }
 
     node *cursor = table[hash(lower_word)];
 
@@ -76,20 +53,6 @@ bool check(const char *word)
 }
 
 // Hashes word to a number
-
-/*
-//reference: https://www.reddit.com/r/cs50/comments/1x6vc8/pset6_trie_vs_hashtable/
-unsigned int hash(const char *word)
-{
-    unsigned int hash = 0;
-    for (int i = 0, n = strlen(word); i < n; i++)
-    {
-        hash = (hash << 2) ^ word[i];
-    }
-    return hash % N;
-}
-*/
-
 // reference: https://stackoverflow.com/questions/7666509/hash-function-for-string
 unsigned int hash(const char *word)
 {

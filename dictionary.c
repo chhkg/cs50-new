@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cs50.h>
+#include <ctype.h>
 
 #include "dictionary.h"
 
@@ -18,7 +19,7 @@ typedef struct node
 node;
 
 // Number of buckets in hash table
-const unsigned int N = 5381;
+const unsigned int N = 65536;
 
 // Set initial global variable of the number of words in dictionary
 int word_count = 0;
@@ -29,10 +30,17 @@ node *table[N];
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    node *cursor = table[hash(word)];
+    char lower_word[LENGTH + 1];
+    for (int i = 0; i < (strlen(word) + 1); i++)
+        {
+            lower_word[i] = tolower(word[i]);
+        }
+
+    node *cursor = table[hash(lower_word)];
+
     while (cursor != NULL)
     {
-        if (strcasecmp(cursor->word, word) == 0)
+        if (strcasecmp(cursor->word, lower_word) == 0)
         {
             return true;
         }
@@ -45,13 +53,27 @@ bool check(const char *word)
 }
 
 // Hashes word to a number
+
+/*
+//reference: https://www.reddit.com/r/cs50/comments/1x6vc8/pset6_trie_vs_hashtable/
+unsigned int hash(const char *word)
+{
+    unsigned int hash = 0;
+    for (int i = 0, n = strlen(word); i < n; i++)
+    {
+        hash = (hash << 2) ^ word[i];
+    }
+    return hash % N;
+}
+*/
+
 // reference: https://stackoverflow.com/questions/7666509/hash-function-for-string
 unsigned int hash(const char *word)
 {
     unsigned long hash = 5381;
     int c = 0;
 
-    while (c == *word++)
+    while ((c = *word++))
     {
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
     }

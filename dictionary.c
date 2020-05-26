@@ -54,7 +54,7 @@ bool check(const char *word)
     */
     char lower_word[LENGTH + 1];
 //    const char *lower_word = word;
-    for (int i = 0; i < (strlen(word)); i++)
+    for (int i = 0; i < (strlen(word) + 1); i++)
         {
             lower_word[i] = tolower(word[i]);
         }

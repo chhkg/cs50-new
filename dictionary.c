@@ -52,12 +52,18 @@ bool check(const char *word)
         }
     }
     */
+    char lower_word[LENGTH + 1];
+//    const char *lower_word = word;
+    for (int i = 0; i < (LENGTH + 1); i++)
+        {
+            lower_word[i] = tolower(word[i]);
+        }
 
-    node *cursor = table[hash(word)];
+    node *cursor = table[hash(lower_word)];
 
     while (cursor != NULL)
     {
-        if (strcasecmp(cursor->word, word) == 0)
+        if (strcasecmp(cursor->word, lower_word) == 0)
         {
             return true;
         }

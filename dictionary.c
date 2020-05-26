@@ -19,7 +19,7 @@ typedef struct node
 node;
 
 // Number of buckets in hash table
-const unsigned int N = 65536;
+const unsigned int N = 200000;
 
 // Set initial global variable of the number of words in dictionary
 int word_count = 0;

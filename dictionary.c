@@ -30,7 +30,7 @@ node *table[N];
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    char *lower_word = malloc(sizeof(strlen(word)));
+    char *lower_word = malloc(sizeof(strlen(word) + 1));
     if (malloc(sizeof(strlen(word))) == NULL)
     {
         unload();

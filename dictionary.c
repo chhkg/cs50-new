@@ -30,11 +30,32 @@ node *table[N];
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    node *cursor = table[hash(word)];
+    char *lower_word = malloc(sizeof(strlen(word)));
+    if (malloc(sizeof(strlen(word))) == NULL)
+    {
+        unload();
+        return false;
+    }
+    else
+    {
+        for (int i = 0; i < (strlen(word)); i++)
+        {
+            if (isupper(word[i]))
+            {
+                lower_word[i] = tolower(word[i]);
+            }
+            else
+            {
+                lower_word[i] = word[i];
+            }
+        }
+    }
+
+    node *cursor = table[hash(lower_word)];
 
     while (cursor != NULL)
     {
-        if (strcasecmp(cursor->word, word) == 0)
+        if (strcasecmp(cursor->word, lower_word) == 0)
         {
             return true;
         }

@@ -10,7 +10,7 @@ if len(argv) != 2:
 db = SQL("sqlite:///students.db")
 
 # Open csv file
-with open("characters.csv", "r") as characters:
+with open("argv[1]", "r") as characters:
     reader = csv.DictReader(characters)
 
     # Parse name for each row

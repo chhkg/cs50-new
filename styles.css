@@ -1,0 +1,44 @@
+p {
+  color: grey;
+}
+
+h1 {
+  text-shadow: 2px 2px 4px red;
+}
+
+#pageHeader {
+ font-size: 6vw;;
+}
+
+.pageSubheader {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.hobbyimg {
+  margin-right: 10px;
+  max-width: 100%;
+}
+
+.row {
+  margin-bottom: 60px;
+}
+
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: grey;
+   color: black;
+   text-align: center;
+}
+
+#footerText {
+  color: black;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.navbar {
+  margin-bottom: 40px;
+}

@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Symbol</th>
+              <th scope="col">Name</th>
+              <th scope="col">Shares</th>
+              <th scope="col">Price</th>
+              <th scope="col">Transacted</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {%for i in range(0, len)%}
+              <tr>
+                <td>{{ rows[len - i - 1]["stocksymbol"] }}</th>
+                <td>{{ rows[len - i - 1]["stockname"] }}</td>
+                <td>{{ rows[len - i - 1]["share"] }}</td>
+                <td>{{ "${:,.2f}".format(rows[len - i - 1]["stockprice"]) }}</td>
+                <td>{{ rows[len - i - 1]["time"] }}</td>
+              </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+{% endblock %}

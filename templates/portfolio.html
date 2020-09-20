@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Portfolio
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Symbol</th>
+              <th scope="col">Name</th>
+              <th scope="col">Shares</th>
+              <th scope="col">Price</th>
+              <th scope="col">TOTAL</th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <tr>
+                <td colspan="4"></td>
+                <td><strong>{{ "${:,.2f}".format(total + cash[0]["cash"]) }}</strong></td>
+            </tr>
+        </tfoot>
+
+        <tbody>
+            {%for i in range(0, len)%}
+              <tr>
+                <td>{{ rows[i]["stocksymbol"] }}</th>
+                <td>{{ rows[i]["stockname"] }}</td>
+                <td>{{ rows[i]["share"] }}</td>
+                <td>{{ "${:,.2f}".format(rows[i]["avgprice"]) }}</td>
+                <td>{{ "${:,.2f}".format(rows[i]["share"] * rows[i]["avgprice"]) }}</td>
+              </tr>
+            {%endfor%}
+
+            <tr>
+              <td>CASH</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{{ "${:,.2f}".format(cash[0]["cash"]) }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

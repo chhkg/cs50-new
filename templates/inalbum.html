@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ rows[0]["albumname"] }} - {{ rows[0]["userid"] }}
+{% endblock %}
+
+{% block main %}
+    <div class="page-title">
+        <h2>{{ rows[0]["albumname"] }}</h2>
+    </div>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+
+
+          <!-- Reference: https://medium.com/dev-genius/get-started-with-multiple-files-upload-using-flask-e8a2f5402e20 -->
+          <form action="{{ url_for('album',albumid = albumid) }}" method="post" enctype="multipart/form-data">
+            <label for="file">Select file(s):</label>
+            <!-- <input type="file" name="files[]" multiple="true" autocomplete="off"> -->
+            <input id="input-b1" name="files[]" type="file" class="file" data-browse-on-zone-click="true" multiple="true" autocomplete="off">
+            <input type="submit" value="Upload">
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Grid row -->
+    <div class="card-columns">
+
+      <!-- Grid column -->
+      {% for i in range(0, len_img) %}
+          <div class="card" id="card-override">
+              <a href='/static/uploads/{{image[i]["savename"]}}' data-size="1600x1067" target="_blank" rel="noopener noreferrer">
+                  <img class="card-img-top" src='/static/uploads/{{image[i]["savename"]}}'/ alt="{{image[i]["oriname"]}}">
+              </a>
+              <div class="card-body" id="card-body-override">
+                  <a href='#' data-href='/remove/{{image[i]["savename"]}}' data-toggle="modal" data-target="#confirm-delete">
+                      <p class="card-text" id="card-text-override" data-href='/remove/{{image[i]["savename"]}}' data-toggle="modal" data-target="#confirm-delete"><small class="text-muted">Delete</small></p>
+                  </a>
+              </div>
+          </div>
+      {% endfor %}
+    </div>
+
+    <!-- Refernece: https://stackoverflow.com/questions/8982295/confirm-deletion-in-modal-dialog-using-twitter-bootstrap -->
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Delete Confirmation
+                </div>
+                <div class="modal-body">
+                    Please confirm to delete this image.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete confirmation -->
+    <script>
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
+    </script>
+
+    {% if rows[0]["imagecount"] == 0 %}
+        <h6 class="pagecontent">You have not uploaded any images.</h6>
+    {% endif %}
+{% endblock %}

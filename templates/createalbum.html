@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    "Album Name" - User Name
+{% endblock %}
+
+{% block main %}
+    <div class="page-title">
+        <h2>Create Album</h1>
+    </div>
+
+    <form action="/createalbum" method="post">
+        <div class="form-group" style="padding:30px">
+            <label for="exampleFormControlInput1">Album Name</label>
+            <input type="text" class="form-control" name="albumname" id="formGroupExampleInput" placeholder="My Album">
+        </div>
+        <button class="btn btn-primary form-row" type="submit">Submit</button>
+    </form>
+
+{% endblock %}

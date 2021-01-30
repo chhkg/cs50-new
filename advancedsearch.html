@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Advanced Search</title>
+        <link rel="stylesheet" href="chrome://resources/css/text_defaults_md.css">
+        <link href="style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="nav">
+            <div class="nav_item">
+                <a href="index.html" class="nav_link">Search</a>
+            </div>
+            <div class="nav_item">
+                <a href="image.html" class="nav_link">Image</a>
+            </div>
+            <div class="nav_item">
+                <a href="advancedsearch.html" class="nav_link">Advanced Search</a>
+            </div>
+        </div>
+        
+        <div class="advsearch">
+            <div class="pagetitle">
+                <label>Advanced Search</label>
+            </div>
+            <div class="divider"></div>
+            <div class="advformbody">
+                <form action="https://google.com/search" name="f">
+                    <div class="advform">
+                        <div class="advinputrow">
+                            <label id="findpagewith" class="advinputlabel">Find pages with...</label>
+                        </div>
+                    </div>
+                    <div class="advform">
+                        <div class="advinputrow">
+                            <label class="advinputlabel">all these words:</label>
+                            <input class="advinputbox" name="as_q" type="text">
+                        </div>
+                    </div>
+                    <div class="advform">
+                        <div class="advinputrow">
+                            <label class="advinputlabel">this exact word or phrase:</label>
+                            <input class="advinputbox" name="as_epq" type="text">
+                        </div>
+                    </div>
+                    <div class="advform">
+                        <div class="advinputrow">
+                            <label class="advinputlabel">any of these words:</label>
+                            <input class="advinputbox" name="as_oq" type="text">
+                        </div>
+                    </div>
+                    <div class="advform">
+                        <div class="advinputrow">
+                            <label class="advinputlabel">none of these words:</label>
+                            <input class="advinputbox" name="as_eq" type="text">
+                        </div>
+                    </div>
+                    <div class="advform">
+                        <div class="advinputlabel"></div>
+                        <div class="advsubmit">
+                            <input name="tbs" type="hidden" value="">
+                            <input class="advbutton" value="Advanced Search" type="submit">
+                        </div>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </body>
+</html>

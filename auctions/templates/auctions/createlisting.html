@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Create Listing</h2>
+
+    <form action="{% url 'createlisting' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input autofocus class="form-control" type="hidden" name="user" placeholder="User Name" value="{{ poster }}" required>
+        </div>
+        <div class="form-group">
+            <input autofocus class="form-control" type="text" name="listingtitle" placeholder="Listing Title" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="listingcategory" placeholder="Category" maxlength="100">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="listingdescription" placeholder="Short Description" maxlength="100" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="number" name="startbid" placeholder="Start Bid Price" min="1" max="999" step="1" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="url" name="listingimage" placeholder="Listing Image URL">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Submit">
+    </form>
+    
+{% endblock %}

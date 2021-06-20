@@ -1,0 +1,35 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ category|title }}</h2>
+
+    <div class="container">
+        {% if item %}
+            {% for item in item %}
+                <div class="row listing_row">
+                    <div class="col-sm-6">
+                        <a class="nav-link" href="{% url 'listing' item.id %}">
+                            <img src="{{ item.image }}" alt="listing_image" class="listing_img">
+                        </a>
+                    </div>
+                    <div class="col-sm-6 listing_content_container">
+                        <a href="{% url 'listing' item.id %}">
+                            <h6 id="listing_name">{{ item.listing_name }}</h6>
+                        </a>
+                        {% if item.current_bid == 0.00 %}
+                            <h5 class="listing_price">${{ item.starting_bid }}</h5>
+                        {% else %}
+                            <h5 class="listing_price">${{ item.current_bid }}</h5>
+                        {% endif %}
+                        <p class="listing_desc">{{ item.listing_desc }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="textbody">
+                <h5>There is no active listings under this category.</h4>
+            </div>
+        {% endif %}
+    </div>
+    
+{% endblock %}

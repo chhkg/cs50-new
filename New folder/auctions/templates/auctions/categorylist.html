@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Category List</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Category</th>
+                <th scope="col">Active Listing</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in category %}
+                <tr>
+                    <td><a href="category/{{ category.category }}">{{ category.category }}</a></td>
+                    <td>{{ category.id__count }}</td>
+                </tr>                
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

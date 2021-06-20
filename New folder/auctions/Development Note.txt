@@ -1,0 +1,28 @@
+User Table
+
+id INTERGER PRIMARY KEY AUTOINCREMENT,
+username TEXT NOT NULL,
+email varchar NOT NULL
+password varchar NOT NULL
+watchlist
+
+
+Auction Listing Table
+userid
+listing_id
+listing_name
+listing_desc
+listing_status
+starting_bid
+image
+category
+
+
+Bids Table
+userid
+bid
+bid_win
+
+Comment Table
+comment
+comment_time

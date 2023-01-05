@@ -1,0 +1,33 @@
+textarea {
+    min-height: 400px;
+}
+
+#email_table_row_header {
+    font-weight: bold;
+}
+
+#email_table, #emails-view-table, table, th, td, tr {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+#emails-content-content {
+    white-space: pre-wrap;
+  }
+  
+
+.links {
+    cursor: pointer;
+}
+
+.samerow {
+    display: flex;
+}
+
+.strongtext {
+    font-weight: bold;
+}
+
+.div_margin {
+    margin: 15px 0px;
+}

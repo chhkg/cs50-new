@@ -1,0 +1,141 @@
+body {
+    padding: 10px;
+}
+
+p, li {
+    font-size: 14px;
+}
+
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+}
+
+.inlinebb {
+    display: inline-block;
+}
+
+.listing_content_container {
+    margin-top: 30px;
+}
+
+.listing_img {
+    width: 100%;
+}
+
+#listing_name {
+    font-size: 22px;
+    color: black;
+}
+
+
+.listing_row {
+    border-width: 1px;
+    border-style: solid;
+    border-color: grey;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.listing_price {
+    font-size: 24px;
+    color:dodgerblue;
+    font-weight: 400;
+}
+
+.listing_user {
+    font-size: 13px;
+    color: grey;
+}
+
+.listing_desc {
+    font-size: 16px;
+    color:darkgrey;
+    font-weight: 300;
+}
+
+.listing_body {
+    display: block;
+}
+
+.indexcontainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.listing_detail_title {
+    padding-top: 10px;
+    font-weight: 500;
+}
+
+.listing_detail_img {
+    max-height: 500px;
+    max-width: 500px;
+}
+
+.listing_detail_price {
+    font-size: 26px;
+    font-weight: 700;
+    color: royalblue;
+}
+
+.listing_detail_desc {
+    padding-top: 15px;
+    font-size: 14px;
+}
+
+.listing_detail_otherinfo {
+    padding-top: 50px;
+}
+
+.listing_detail_commentsection {
+    padding-top: 50px;
+}
+
+.form-label {
+    font-size: 14px;
+}
+
+.form-control {
+    font-size: 14px;
+}
+
+#listing_detail_commentuser {
+    margin-top: -10px;
+}
+
+.listing_detail_comment {
+    margin: 15px;
+}
+
+.listing_detail_commentcard {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.listing_detail_commentform {
+    padding-top: 20px;
+}
+
+.textbody {
+    padding: 30px 0px;
+}
+
+.sold_alert {
+    color: grey;
+}
+
+.btn-link.btn-anchor {
+    outline: none !important;
+    border: 0;
+    vertical-align: baseline;
+    background: none;
+    color: grey;
+    text-decoration: underline;
+    padding: 10px 0px;
+    font-size: 13px;
+}
+
+.bid-form {
+    padding-top: 20px;
+}

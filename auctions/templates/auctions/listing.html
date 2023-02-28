@@ -1,0 +1,140 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing Page</h2>
+
+    {% if message %}
+        <div class="alert alert-warning" role="alert">{{ message }}</div>
+    {% endif %}
+
+    <div class="listingcontainer">
+        <h5 class="listing_detail_title">{{ listing.listing_name }}</h5>
+        
+        <!-- Add to / remove from watchlist, if the user is a guest, redirect to log in page-->
+        <!-- <p class="listing_detail_watchlistbutton">Add to watchlist</p> -->
+        {% if user.is_authenticated %}        
+            {% if listing not in watchlist_item %}
+                <form action="{% url 'listing' listing.id%}" method="post"> 
+                    {% csrf_token %}
+                    <input class="btn-link btn-anchor" type="submit" value="Add to watchlist" name="add_watchlist"> 
+                </form>
+            {% else %}
+                <form action="{% url 'listing' listing.id%}" method="post"> 
+                    {% csrf_token %}
+                    <input class="btn-link btn-anchor" type="submit" value="Remove from watchlist" name="remove_watchlist"> 
+                </form>
+            {% endif %}
+        {% else %}
+            <form action="{% url 'listing' listing.id%}" method="post">
+                {% csrf_token %} 
+                <input class="btn-link btn-anchor" type="submit" value="Add to watchlist" name="go_to_login"> 
+            </form>
+        {% endif %}
+
+        
+        <!--Listing Details-->
+        <div class="">
+            <img src="{{ listing.image }}" alt="listing_image" class="listing_detail_img">
+        </div>
+        <div class="listing_detail_desc">
+            <p>{{ listing.listing_desc }}</p>
+        </div>
+        
+        {% if listing.current_bid == 0.00 %}
+            <div class="listing_detail_price">
+                <p>${{ listing.starting_bid }}</p>
+            </div>
+        {% else %}
+            <div class="listing_detail_price">
+                <p>${{ listing.current_bid }}</p>
+            </div>
+        {% endif %}
+
+        <!-- If the auction is closed, Show closed and won user-->
+        {% if listing.listing_status == False %}
+            
+            <!-- If someone placed a bid-->
+            {% if bid.user %}
+                <p>This auction is won by <strong>{{ bid.user }}</strong>.</p>
+
+            <!-- If no one placed a bid-->
+            {% else %}
+                <p>This auction is closed without a winner.</p>
+            {% endif %}
+
+        <!-- If the auction is active-->
+        {% else %}
+            {% if user.is_authenticated and user == listing.user %}
+            <!-- If it is the item owner, show button of closing the auction-->
+                <form action="{% url 'listing' listing.id%}" method="post">
+                    {% csrf_token %}                   
+                    <div class="mb-3">
+                        {% if bid.user %}
+                            <p><strong>{{ bid_count }}</strong> bids have been placed. The last bid is from <strong>{{ bid.user }}</strong>.</p>
+                        {% else %}
+                            <p>There is no bid for this item.</p>
+                        {% endif %}
+                        <input class="btn btn-primary" type="submit" value="Close the Bid" name="close_bid">        
+                    </div>
+                </form>
+            {% else %}
+            <!-- If it is other users, allow to place bid -->
+                <form action="{% url 'listing' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {% if bid.user %}
+                            <label for="bid" class="form-label"><strong>{{ bid_count }}</strong> bids have been placed. The last bid is from <strong>{{ bid.user }}</strong>.</label>
+                        {% else %}
+                            <label for="bid" class="form-label">There is no bid for this item.</label>
+                        {% endif %}
+                        <input type="number" placeholder="Your Bid" name="new_bid" class="form-control" required>
+                        <div class="bid-form">
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </div>            
+                    </div>
+                </form>
+            {% endif %}
+        {% endif %}
+
+        <div class="listing_detail_otherinfo">
+            <h4 class="listing_detail_sectiontitle">Other Information</h4>
+            <ul>
+                <li>Uploaded by: {{ listing.user }}</li>
+                <li>Uploaded on: {{ listing.posting_date }}</li>
+                <li>Category: {{ listing.category }}</li>
+            </ul>        
+        </div>
+
+        <!--Comment Section-->
+        <div class="listing_detail_commentsection">
+            <h4 class="listing_detail_sectiontitle">Comment</h4>
+
+            <!--Show this form to logged in users only-->
+            {% if user.is_authenticated %}
+                <form action="{% url 'listing' listing.id %}" class="listing_detail_commentform" method="post">
+                    {% csrf_token %}
+                    <div class="form-floating form-group">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="comment"></textarea>
+                    </div>
+                    <div>
+                        <input class="btn btn-primary" type="submit" value="Submit" name="submit_comment">
+                    </div>
+                </form>
+            {% endif %}   
+
+            <!-- Others' comments-->
+            <hr class="solid">
+            {% for comment in comment %}
+                <div class="card listing_detail_commentcard">
+                    <div class="listing_detail_comment" class="card-body">
+                        <p class="listing_detail_commentcontent">{{ comment.comment }}</p>
+                        <figcaption class="blockquote-footer" id="listing_detail_commentuser">by {{ comment.user }} at {{comment.comment_time}}</figcaption>        
+                    </div>
+                </div> 
+            {% endfor %} 
+        </div>
+  
+
+    </div>
+    
+{% endblock %}

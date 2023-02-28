@@ -1,0 +1,110 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block script %}  
+  <script type="module" src="{% static 'network/profile.js' %}"></script> 
+{% endblock %}
+
+{% block body %}
+    <div id='page-header' class="element_margin_bottom element_margin_top"><h2>Profile</h2></div>
+    
+    <div id='profile'>
+      <div class="card element_margin_bottom each_post element_margin_top">
+        <div class="card-body">
+          <p class='hidden' id="userid">{{ user_id }}</p>
+          <h3>{{ username }}</h3>
+          <div>
+            <h6 class="same_line_text">Follower: </h6>
+            <h6 class="same_line_text" id="follower_count">{{ follower_count }}</h6>
+          </div>
+          <div>
+            <h6 class="same_line_text">Following: </h6>
+            <h6 class="same_line_text" id="following_count">{{ following_count }}</h6>
+          </div>
+          <h6 id="profile-post-count">Post: {{ post_count }}</h6>
+          {% if user_id != user.id %}
+            {% if not following %}
+              <button class="follow_button btn btn-primary btn-sm" id="follow-button">Follow</button>
+            {% else %}
+              <button class="follow_button btn btn-secondary btn-sm" id="follow-button">Following</button>
+            {% endif %}
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+    <div id='profile-my-post'>
+      
+      {% for post in posts_page_obj %}
+        <div class="card element_margin_top element_margin_bottom each_post">
+          <div class="card-body">
+            <p class="hidden postid" id="postid">{{ post.id }}</p>
+            <p class="hidden postuser" id="authorid">{{ post.user.id }}</p>
+            {% if post.user == request.user %}
+              <p class='badge badge-success'>Your Post</p>
+              <i class="each_post_edit_button bi bi-pencil-square post_edit_button"></i>
+            {% endif %}
+            <h5 class="pointer_cursor min_content"><a class="no_style_text_link" href="{% url 'profile' post.user.id %}">{{ post.user.username }}</a></h5>
+            <pre class="post_body">{{ post.body }}</pre>
+            <div class="d-flex justify-content-start">
+              <i class="fa-xs bi bi-heart-fill icon-red post_like_count_icon"></i>
+              <p class="post_like_count post_light_content" id="post_like_count">{{post.likes.count}}</p>
+            </div>
+            <p class="post_reduced_line_margin post_light_content">{{ post.timestamp }}</p>
+            {% if request.user in post.likes.all %}
+              <i class="each_post_like_button icon-red bi bi-heart-fill" id="post_like_button"></i>
+            {% else %}
+              <i class="each_post_like_button bi bi-heart" id="post_like_button"></i>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+    
+    {% if not posts_page_obj %}
+      {% if user_id == request.user.id %}
+        <h6 class="alert alert-info" role="alert">You have not published anything yet.</h6>
+      {% else %}
+        <h6 class="alert alert-info" role="alert">This user has not published anything yet.</h6>
+      {% endif %}
+    {% else %}
+      <div id='profile-post-pagination'>
+        <nav aria-label="post-pagination">
+          <ul class="pagination justify-content-center">
+            <span class="step-links">
+                <li class="page-item same_line_text">    
+                  <a class="page-link" href="?page=1">&laquo; First</a>
+                </li>
+                {% if posts_page_obj.has_previous %}
+                  <li class="page-item same_line_text">    
+                      <a class="page-link same_line_text" href="?page={{ posts_page_obj.previous_page_number }}">Previous</a>
+                  </li>
+                {% else %}
+                  <li class="page-item same_line_text disabled">    
+                    <a class="page-link" href="#">Previous</a>
+                  </li>
+                {% endif %}
+        
+                <span class="current same_line_text">
+                    Page {{ posts_page_obj.number }} of {{ posts_page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if posts_page_obj.has_next %}
+                    <li class="page-item same_line_text">
+                      <a class="page-link" href="?page={{ posts_page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                  <li class="page-item same_line_text disabled">
+                    <a class="page-link" href="#">Next</a>
+                  </li>
+                {% endif %}
+                <li class="page-item same_line_text">
+                  <a class="page-link" href="?page={{ posts_page_obj.paginator.num_pages }}">Last &raquo;</a>
+                </li>
+            </span>
+          </ul>
+        </nav>
+      </div>
+    {% endif %}
+    </div>
+{% endblock %}

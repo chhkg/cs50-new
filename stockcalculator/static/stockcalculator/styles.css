@@ -1,0 +1,134 @@
+@media (min-width: 480px) {
+  .card-columns {
+      column-count: 1;
+  }
+  #currentholding-currency {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 992px) {
+  .card-columns {
+      column-count: 2;
+  }
+}
+
+.currentholding-addcurrency {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 1.3em;
+}
+
+.transaction-action-icon {
+  cursor: pointer;
+  font-size: 1.1em;
+}
+
+.margin-right-s {
+  margin-right: 4px;
+}
+
+.form_background {
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.section_margin_top {
+  margin-top: 24px;
+}
+
+.section_margin_bottom {
+  margin-bottom: 24px;
+}
+
+.inline-block
+{
+    display: inline-block;
+}
+
+.trading-symbol {
+  display: inline-block;
+  width: 50%;
+  vertical-align: middle;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0;
+}
+
+.same_line_text {
+  display:inline-block;
+}
+
+.center {
+  margin: auto;
+  width: 90%;
+}
+
+#pagination {
+  margin: 0px;
+  padding: 0px;
+}
+
+.pagination {
+  display: flex;
+  margin-top: 0;
+}
+
+.error-message {
+  color: red;
+}
+
+.table-font-size-14px {
+  font-size: 14px;
+}
+
+.green-text {
+  color: green;
+}
+
+.red-text {
+  color: red;
+}
+
+.modal-header {
+  display: block;
+}
+
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+
+#currentholding-fiat-header {
+  //margin-top: 0;
+}
+
+.currentholding-no-holding-message {
+  padding: 8px;
+}
+
+.no-border {
+  border: 0;
+}
+
+.table-border {
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+}
+
+.width-80 {
+  max-width: 80%;
+}
+
+.section_margin_bottom-50 {
+  margin-bottom: 50px;
+}
+
+#mobile-menu {
+  margin-bottom:0px;
+}

@@ -1,0 +1,121 @@
+{% extends "stockcalculator/layout.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block body %}  
+  <h2 class="section_margin_top section_margin_bottom">Current Holding</h2>
+  
+  <!-- StockHolding -->
+  <h4>Stock</h4>
+
+  {% if no_stock_message|length > 0 %}
+    <div class="card no-border">
+      <div class="table-responsive table-border">
+        <table class="table table-hover margin-bottom-0">  
+          <thead class="bg-light">
+              <tr>
+                <th scope="col">Symbol</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Avg Cost</th>
+                <th scope="col">Total Cost</th>
+              </tr>
+          </thead>
+        </table>
+      </div>
+      <p class="currentholding-no-holding-message">{{ no_stock_message }}</p>
+    </div>
+  {% else %}
+
+    <div class="card-columns section_margin_bottom" id="stock_holding_tables"> 
+      {% for currency, stockholding_by_currency in stockholding_by_currency_dictionary.items %}
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table table-hover margin-bottom-0">
+              <thead class="bg-light">
+                <tr>                
+                  {% for key, value in total_amount_by_currency_dictionary.items %}
+                    {% if key == currency %}
+                    <th colspan="4"> {{ currency }}: {{ value|floatformat:2|intcomma }}</th>
+                    {% endif %}
+                  {% endfor %}
+                </tr>
+                <tr>
+                  <th scope="col">Symbol</th>
+                  <th scope="col">Qty</th>
+                  <th scope="col">Avg Cost</th>
+                  <th scope="col">Total Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for holding in stockholding_by_currency %}
+                  <tr>
+                    <td>{{ holding.symbol }}</td>
+                    <td>{{ holding.totalquantity }}</td>
+                    <td>{{ holding.averageprice|floatformat:2|intcomma }}</td>
+                    <td>{{ holding.totalamount|floatformat:2|intcomma }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- 2nd Row-->
+  <div class="card-columns section_margin_bottom" id="currentholding-currency"> 
+    <!-- Fiat Currency Table-->
+    
+    <div class="card no-border">
+      <h4 id="currentholding-fiat-header">Fiat Currency</h4>
+      <div class="table-responsive table-border">
+        <table class="table table-hover margin-bottom-0">
+          <thead class="bg-light">
+            <tr>
+              <th scope="col">Symbol</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for holding in fiatholding_by_currency %}
+              <tr>
+                <td>{{ holding.currency }}</td>
+                <td>{{ holding.totalholding|floatformat:2|intcomma }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="currentholding-no-holding-message">{{ no_fiat_message }}</p>
+    </div>
+    
+    
+    <!-- Crypto Currency Table-->
+    
+    <div class="card no-border">
+      <h4 id="currentholding-crypto-header">Cryptocurrency</h4>
+        <div class="table-responsive table-border">
+          <table class="table table-hover margin-bottom-0">
+            <thead class="bg-light">
+              <tr>
+                <th scope="col">Symbol</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for holding in cryptoholding_by_currency %}
+                <tr>
+                  <td>{{ holding.currency }}</td>
+                  <td>{{ holding.totalholding|custom_rounding:'Crypto'|intcomma }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="currentholding-no-holding-message">{{ no_crypto_message }}</p>
+      </div>
+  </div>
+  
+{% endblock %}

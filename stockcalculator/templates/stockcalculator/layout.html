@@ -1,0 +1,112 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>{% block title %}Trading Performance Calculator{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- Local CSS style sheet -->
+        <link href="{% static 'stockcalculator/styles.css' %}" rel="stylesheet">
+        
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+        <!-- icons library -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+        <!-- Latest compiled and minified CSS of bootstrap select-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css">
+        
+        <!-- Latest compiled and minified JavaScript of bootstrap select-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/bootstrap-select.min.js"></script>
+
+        <!--Responsive viewport meta tag-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% block script %}
+        {% endblock %}
+    </head>
+    <body>
+        <!-- Desktop menu-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light d-none d-lg-block">
+            <a class="navbar-brand" href="{% url 'index' %}">Trading Performance Calculator</a>
+          
+            <div>
+              <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
+                <li class="nav-item" id='menu-current-holding'>
+                    <a class="nav-link" href="{% url 'currentholding' %}">Current Holding</a>
+                  </li>
+                  <li class="nav-item" id='menu-transaction-history'>
+                      <a class="nav-link" href="{% url 'transaction' %}">Transaction History</a>
+                  </li>
+                  <li class="nav-item" id='menu-performance'>
+                      <a class="nav-link" href="{% url 'performance' %}">Performance</a>
+                  </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+              </ul>
+            </div>
+          </nav>
+
+        <!-- Mobile menu -->
+        <div class="pos-f-t d-lg-none">
+            <nav class="navbar navbar-light bg-light" id="mobile-menu">
+                <a class="navbar-brand" href="{% url 'index' %}">Trading Performance Calculator</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
+            <div class="collapse" id="navbarToggleExternalContent">
+                <div class="bg-light p-4">
+                    <ul class="bg-light shadow-3 py-2 px-3">
+                        {% if user.is_authenticated %}
+                        <li class="btn btn-link btn-block m-0 p-2 text-start text-dark" id='menu-current-holding'>
+                            <a class="nav-link text-dark" href="{% url 'currentholding' %}">Current Holding</a>
+                        </li>
+                        <li class="btn btn-link btn-block m-0 p-2 text-start text-dark" id='menu-transaction-history'>
+                            <a class="nav-link text-dark" href="{% url 'transaction' %}">Transaction History</a>
+                        </li>
+                        <li class="btn btn-link btn-block m-0 p-2 text-start text-dark" id='menu-performance'>
+                            <a class="nav-link text-dark" href="{% url 'performance' %}">Performance</a>
+                        </li>
+                            <li class="btn btn-link btn-block m-0 p-2 text-start text-dark">
+                                <a class="nav-link text-dark" href="{% url 'logout' %}">Log Out</a>
+                            </li>
+                        {% else %}
+                            <li class="btn btn-link btn-block m-0 p-2 text-start text-dark">
+                                <a class="nav-link text-dark" href="{% url 'login' %}">Log In</a>
+                            </li>
+                            <li class="btn btn-link btn-block m-0 p-2 text-start text-dark">
+                                <a class="nav-link text-dark" href="{% url 'register' %}">Register</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+    <div class="container-fluid">
+        {% block body %}
+        {% endblock %}
+    </div>
+</html>

@@ -1,0 +1,32 @@
+{% extends "stockcalculator/layout.html" %}
+{% load static %}
+
+{% block body %}  
+  <h2 class="section_margin_top section_margin_bottom">Welcome to enjoy these features!</h2>
+
+  <h4 class="text-center">Tracking different trading assets</h4>
+  <div class="width-80 section_margin_bottom-50 mx-auto">
+    <img src="{% static 'stockcalculator/images/screenshot-current-holding.jpg' %}" class="img-thumbnail img-fluid" alt="current-holding">
+  </div>
+  
+
+
+  <h4 class="text-center">Recording every trading activity</h4>
+  <div class="width-80 section_margin_bottom-50 mx-auto">
+    <img src="{% static 'stockcalculator/images/screenshot-transaction-history.jpg' %}" class="img-thumbnail img-fluid" alt="current-holding">
+  </div>
+  
+  <h4 class="text-center">Reviewing performance at a glance</h4>
+  <div class="width-80 section_margin_bottom-50 mx-auto">
+    <img src="{% static 'stockcalculator/images/screenshot-performance.jpg' %}" class="img-thumbnail img-fluid" alt="current-holding">
+  </div>
+
+  {% if not user.is_authenticated %}
+    <div class="section_margin_bottom-50 text-center">
+      <a href="{% url 'register' %}">
+        <button type="button" class="btn btn-primary">Register now for free!</button>
+      </a>
+    </div>
+  {% endif %}
+
+{% endblock %}

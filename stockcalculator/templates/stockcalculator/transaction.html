@@ -1,0 +1,294 @@
+{% extends "stockcalculator/layout.html" %}
+{% load static %}
+{% load crispy_forms_tags %} 
+{% load custom_filters %}
+{% load humanize %}
+{% block script %}
+  <script type="module" src="{% static 'stockcalculator/transaction.js' %}"></script> 
+{% endblock %}
+
+{% block body %}  
+  <h2 class="section_margin_top section_margin_bottom">Transaction History</h2>
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }} error-message"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+  {% endif %}
+
+  <!--Alerts-->
+  <div class="alert alert-success fixed_position" id="success-alert" role="alert"></div>
+  <div class="alert alert-danger fixed_position" id="fail-alert" role="alert"></div>
+
+  <!--Button to hide and expand search form-->
+  <div class="section_margin_bottom inline-block">
+    <button type="button" class="btn btn-primary" id="search-form-expand-button">Search</button>
+    <button type="button" class="btn btn-success" id="create-form-expand-button">Create</button>
+    <a href="{% url 'transaction' %}">
+      <button type="button" class="btn btn-secondary" id="clear-search-button">Clear Search</button>
+    </a>
+  </div>
+
+  <!--Transaction search form-->
+  <div id='transaction-search-form-div' class='form_background section_margin_bottom'>
+    <h4>Search Transactions</h4>
+    <form action="{% url 'transaction' %}" method="GET" id="transaction-search-form">
+      {% csrf_token %}
+      {{ searchform|as_crispy_errors }}
+      <div class="form-row">
+        <div class="form-group col-md-4 mb-0">
+          {{ searchform.asset|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-4 mb-0">
+          {{ searchform.type|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-4 mb-0">
+          {{ searchform.currency|as_crispy_field }}
+        </div>
+      </div>
+      <div class='form-row'>
+        <div class="form-group col-md-4 mb-0">
+          {{ searchform.symbol|as_crispy_field }}
+        </div>
+        <div class='form-group col-md-4 mb-0'>
+          {{ searchform.startdate|as_crispy_field }}
+        </div>
+        <div class='form-group col-md-4 mb-0'>
+          {{ searchform.enddate|as_crispy_field }}
+        </div>
+      </div>
+      {{ searchform.remark|as_crispy_field }}
+      <!--{{ searchform|crispy }}-->
+      <button type="submit" class="btn btn-primary" id="search_button">Search</button>
+      <button type="button" class="btn btn-secondary" id="clear_filter_button">Clear Filter</button>
+      <button type="button" class="btn btn-default" id="search_cancel_button">Hide Search</button>
+    </form>
+  </div>
+
+  <!--Create transaction form-->
+  <div id='transaction-create-form-div' class='form_background section_margin_bottom'>
+    <h4>Create Transaction</h4>
+    <form action="{% url 'transaction' %}" method="post" id="transaction-create-form">
+      {% csrf_token %}
+      {{ createform|as_crispy_errors }}
+      {{ createform.asset|as_crispy_field }}
+      <div class='form-row'>
+        <div class='form-group col-md-6 mb-0'>
+          {{ createform.date|as_crispy_field }}
+        </div>
+        <div class='form-group col-md-6 mb-0'>
+          {{ createform.type|as_crispy_field }}
+        </div>
+      </div>
+      {{ createform.currency|as_crispy_field }}
+      {{ createform.symbol|as_crispy_field }}
+      <div class='form-row'>
+        <div class='form-group col-md-6 mb-0'>
+          {{ createform.buyfiatsymbol|as_crispy_field }}
+        </div>
+        <div class='form-group col-md-6 mb-0'>
+          {{ createform.sellfiatsymbol|as_crispy_field }}
+        </div>
+      </div>
+      <div class='form-row'>
+        <div class='form-group col-md-6 mb-0'>
+          {{ createform.buycryptosymbol|as_crispy_field }}
+        </div>
+        <div class='form-group col-md-6 mb-0'>
+          {{ createform.sellcryptosymbol|as_crispy_field }}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4 mb-0">
+          {{ createform.quantity|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-4 mb-0">
+          {{ createform.price|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-4 mb-0">
+          {{ createform.proceed|as_crispy_field }}
+        </div>
+      </div>
+      <div class='form-row'>
+        <div class='form-group col-md-6 mb-0'>
+          {{ createform.fee|as_crispy_field }}
+        </div>
+        <div class='form-group col-md-6 mb-0'>
+          {{ createform.basis|as_crispy_field }}
+        </div>
+      </div>
+      {{ createform.remark|as_crispy_field }}
+      <!--{{ createform|crispy }}-->
+      <button type="submit" class="btn btn-primary" id="create_button">Create</button>
+      <button type="button" class="btn btn-default" id="create_cancel_button">Cancel</button>
+    </form>
+  </div>
+  
+
+  <!--Transaction table-->
+  <div class="">
+    <table class="table table-hover table-font-size-14px">
+      <thead class="bg-light sticky-top">
+        <tr table-font-size-14px>
+          <th scope="col">Date</th>
+          <th scope="col">Asset</th>
+          <th scope="col">Type</th>
+          <th scope="col">Currency</th>
+          <th scope="col">Symbol</th>
+          <th scope="col">Qty</th>
+          <th scope="col">Price</th>
+          <th scope="col">Proceed</th>
+          <th scope="col">Fees/Tax</th>
+          <th scope="col">Basis</th>
+          <th scope="col">PL%</th>
+          <th scope="col">PL</th>
+          <th scope="col">Remark</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for transaction in transactions_page_obj %}
+          <div class="each-transaction-div">
+            <tr>
+              <td class="transaction-id" hidden>{{ transaction.id }}</td>
+              <td>{{ transaction.date|date:'Y-m-d' }}</td>
+              <td>{{ transaction.get_asset_display }}</td>
+              <td>{{ transaction.get_type_display }}</td>
+              <td>{{ transaction.get_currency_display }}</td>
+              <td>{{ transaction.symbol }}</td>
+              <td>{{ transaction.quantity|custom_rounding:transaction.asset|intcomma }}</td>
+              <td>{{ transaction.price|custom_rounding:transaction.asset|intcomma }}</td>
+              
+              {% if transaction.proceed is not Null and transaction.proceed > 0 %}
+                <td class="green-text">{{ transaction.proceed|custom_rounding:transaction.asset|intcomma }}</td>
+              {% else %}
+                <td class="red-text">{{ transaction.proceed|custom_rounding:transaction.asset|intcomma }}</td>
+              {% endif %}
+
+              
+              <td class="red-text">{{ transaction.fee|custom_rounding:transaction.asset|intcomma }}</td>
+              
+              {% if transaction.basis is not Null and transaction.basis > 0 %}
+                <td class="green-text">{{ transaction.basis|custom_rounding:transaction.asset|intcomma }}</td>
+              {% else %}
+                <td class="red-text">{{ transaction.basis|custom_rounding:transaction.asset|intcomma }}</td>
+              {% endif %}
+              
+              {% if transaction.plpercent is not Null and transaction.plpercent > 0 %}
+                <td class="green-text">{{ transaction.plpercent|percent|intcomma }}</td>
+              {% elif transaction.plpercent is not Null and transaction.plpercent < 0 %}
+                <td class="red-text">{{ transaction.plpercent|percent|intcomma }}</td>
+              {% else %}
+                <td>{{ transaction.plpercent|floatformat:2 }}</td>
+              {% endif %}
+              
+              {% if transaction.pl > 0 %}
+                <td class="green-text">{{ transaction.pl|custom_rounding:transaction.asset|intcomma }}</td>
+              {% else %}
+                <td class="red-text">{{ transaction.pl|custom_rounding:transaction.asset|intcomma }}</td>
+              {% endif %}
+
+              <td class="transaction-remark">{{ transaction.remark }}</td>
+              <td>
+                <i data-toggle="modal" data-target="#edit-transaction-modal" class="bi bi-pencil-square transaction-action-icon margin-right-s transaction-edit-button"></i>
+                <i data-toggle="modal" data-target="#delete-transaction-confirmation-modal" data-transactionid="" class="bi bi-trash transaction-action-icon transaction-delete-button"></i>
+              </td>
+            </tr>
+          </div>
+          {% endfor %}
+      </tbody>
+    </table>
+    <p>{{ message }}</p>
+  </div>
+  
+  <div id='transactions-pagination'>
+    <nav aria-label="transactions-pagination">
+      <ul class="pagination justify-content-center">
+        <span class="step-links">
+            <li class="page-item same_line_text">    
+              <a class="page-link" href="?page=1&{{ search_parameters_clean }}">&laquo; First</a>
+            </li>
+            {% if transactions_page_obj.has_previous %}
+              <li class="page-item same_line_text">    
+                  <a class="page-link same_line_text" href="?page={{ transactions_page_obj.previous_page_number }}&{{ search_parameters_clean }}">Previous</a>
+              </li>
+            {% else %}
+              <li class="page-item same_line_text disabled">    
+                <a class="page-link" href="#">Previous</a>
+              </li>
+            {% endif %}
+    
+            <span class="current same_line_text">
+                Page {{ transactions_page_obj.number }} of {{ transactions_page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if transactions_page_obj.has_next %}
+                <li class="page-item same_line_text">
+                  <a class="page-link" href="?page={{ transactions_page_obj.next_page_number }}&{{ search_parameters_clean }}">Next</a>
+                </li>
+            {% else %}
+              <li class="page-item same_line_text disabled">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            {% endif %}
+            <li class="page-item same_line_text">
+              <a class="page-link" href="?page={{ transactions_page_obj.paginator.num_pages }}&{{ search_parameters_clean }}">Last &raquo;</a>
+            </li>
+        </span>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Edit transaction modal form -->
+  <div id="edit-transaction-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" id="close-edit-modal" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Edit Transaction</h4>
+        </div>
+        <div class="modal-body edit-modal-remark">
+          <form action="" method="POST">
+            {% csrf_token %}
+            {{ edit_transaction_form|crispy }}
+          </form>  
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="save-edit-change-button" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Delete transaction modal form -->
+  <div id="delete-transaction-confirmation-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" id="close-delete-modal" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Delete Transaction</h4>
+        </div>
+        <div class="modal-body">
+          <p id="delete_transaction_id" hidden></p>
+          <p>Confirm delete? It is irreversible.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="confirm-delete-button" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+  
+{% endblock %}

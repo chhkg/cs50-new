@@ -1,0 +1,255 @@
+{% extends "stockcalculator/layout.html" %}
+{% load static %}
+{% load crispy_forms_tags %} 
+{% load custom_filters %}
+{% load humanize %}
+{% block script %}
+  <!-- <script type="module" src="{% static 'stockcalculator/performance.js' %}"></script> -->
+{% endblock %}
+
+{% block body %}  
+  <h2 class="section_margin_top section_margin_bottom">Performance</h2>
+  
+  <!--Performance filter form-->
+  <!--Transaction search form-->
+  <div id='performance-filter-form-div' class='form_background section_margin_bottom'>
+    <form action="{% url 'performance' %}" method="GET" id="performance-filter-form">
+      {% csrf_token %}
+      <div class='form-row'>
+        <div class='form-group col-md-6 mb-0'>
+          {{ performancefilterform.asset|as_crispy_field }}
+        </div>
+        <div class='form-group col-md-6 mb-0'>
+          {{ performancefilterform.interval|as_crispy_field }}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" id="filter_button">Filter</button>
+    </form>
+  </div>
+
+  <!--Performance table-->
+  
+  {% if asset == "Stock" %}
+    <h3 class="section_margin_bottom">Stock</h3>
+    <p>{{ no_stock_message }}</p>
+  {% elif asset == "FiatMoney" %}
+    <h3 class="section_margin_bottom">Fiat Money</h3>
+    <p>{{ no_fiat_message }}</p>
+  {% else %}
+    <h3 class="section_margin_bottom">Crypto</h3>
+    <p>{{ no_crypto_message }}</p>
+  {% endif %}
+
+  {% for currency, transactions_by_currency_page_obj in transactions_by_currency_dictionary.items %}
+    
+    {% if asset == "Stock" %}
+      <h5>{{ currency }}</h5>
+
+      <div class="table-responsive section_margin_bottom">
+        <table class="table table-hover table-font-size-14px">
+          <thead class="bg-light">
+            <tr>
+              <th scope="col">Start Date</th>
+              <th scope="col">End Date</th>
+              <th scope="col">Realized PL</th>
+              <th scope="col">Buy</th>
+              <th scope="col">Sell</th>
+              <th scope="col">Win Rate</th>
+              <th scope="col">Avg Win %</th>
+              <th scope="col">Avg Loss %</th>
+              <th scope="col">Max Win %</th>
+              <th scope="col">Max Loss %</th>
+              <th scope="col">Max Win</th>
+              <th scope="col">Max Loss</th>
+              <th scope="col">Dividend</th>
+              <th scope="col">Interest</th>
+              <th scope="col">Deduction</th>
+              <th scope="col">Fee</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for performance in transactions_by_currency_page_obj %}
+              <tr >
+                <td>{{ performance.start_date|date:'Y-m-d' }}</td>
+                <td>{{ performance.end_date|date:'Y-m-d' }}</td>
+                
+                {% if performance.realized_pl is not Null and performance.realized_pl > 0 %}
+                  <td class="green-text">{{ performance.realized_pl|floatformat:2|intcomma }}</td>
+                {% elif performance.realized_pl is not Null and performance.realized_pl < 0 %}
+                  <td class="red-text">{{ performance.realized_pl|floatformat:2|intcomma }}</td>
+                {% else %}
+                  <td>0</td>
+                {% endif %}
+                
+                {% if performance.buy_count is not Null %}
+                  <td>{{ performance.buy_count|intcomma }}</td>
+                {% else %}
+                  <td>0</td>
+                {% endif %}
+                
+                
+                {% if performance.sell_count is not Null %}
+                  <td>{{ performance.sell_count|intcomma }}</td>
+                {% else %}
+                  <td>0</td>
+                {% endif %}
+                
+                {% if performance.win_rate is not Null and performance.win_rate > 0 %}
+                  <td class="green-text">{{ performance.win_rate|percent|intcomma }}</td>
+                {% elif performance.win_rate is not Null and performance.win_rate < 0 %}
+                  <td class="red-text">{{ performance.win_rate|percent|intcomma }}</td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+
+                {% if performance.avg_win_percent is not Null %}
+                  <td class="green-text">{{ performance.avg_win_percent|percent|intcomma }}</td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+
+                {% if performance.avg_loss_percent is not Null %}
+                  <td class="red-text">{{ performance.avg_loss_percent|percent|intcomma }}</td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+
+                {% if performance.max_win_percent is not Null %}
+                  <td class="green-text">{{ performance.max_win_percent|percent|intcomma }}</td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+
+                {% if performance.max_loss_percent is not Null %}
+                  <td class="red-text">{{ performance.max_loss_percent|percent|intcomma }}</td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+
+                <td class="green-text">{{ performance.max_win|floatformat:2|intcomma }}</td>
+                <td class="red-text">{{ performance.max_loss|floatformat:2|intcomma }}</td>
+                
+                {% if performance.dividend > 0 %}
+                  <td class="green-text">{{ performance.dividend|floatformat:2|intcomma }}</td>
+                {% else %}
+                  <td class="red-text">{{ performance.dividend|floatformat:2|intcomma }}</td>
+                {% endif %}
+                
+                {% if performance.interest > 0 %}
+                  <td class="green-text">{{ performance.interest|floatformat:2|intcomma }}</td>
+                {% else %}
+                  <td class="red-text">{{ performance.interest|floatformat:2|intcomma }}</td>
+                {% endif %}
+                
+                <td class="red-text">{{ performance.deduction|floatformat:2|intcomma }}</td>
+                <td class="red-text">{{ performance.fees|floatformat:2|intcomma }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <h5>{{ currency }}</h5>
+
+      <div class="table-responsive section_margin_bottom">
+        <table class="table table-hover table-font-size-14px">
+          <thead class="bg-light">
+            <tr>
+              <th scope="col">Start Date</th>
+              <th scope="col">End Date</th>
+              <th scope="col">Net Change</th>
+              <th scope="col">Buy</th>
+              <th scope="col">Sell</th>
+              {% if asset == "FiatMoney" %}
+                <th scope="col">Buy Stock</th>
+                <th scope="col">Sell Stock</th>
+              {% endif %}
+              <th scope="col">Deposit</th>
+              <th scope="col">Withdraw</th>
+              <th scope="col">Interest</th>
+              <th scope="col">Dividend</th>
+              <th scope="col">Deduction</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for performance in transactions_by_currency_page_obj %}
+              <tr >
+                <td>{{ performance.start_date|date:'Y-m-d' }}</td>
+                <td>{{ performance.end_date|date:'Y-m-d' }}</td>
+
+                {% if performance.netchange > 0 %}
+                  <td class="green-text">{{ performance.netchange|normalize_fiat_crypto:asset|intcomma }}</td>
+                {% else %}
+                  <td class="red-text">{{ performance.netchange|normalize_fiat_crypto:asset|intcomma }}</td>
+                {% endif %}
+
+                <td class="green-text">{{ performance.buy|normalize_fiat_crypto:asset|intcomma }}</td>
+                <td class="red-text">{{ performance.sell|normalize_fiat_crypto:asset|intcomma }}</td>
+                
+                {% if asset == "FiatMoney" %}
+                  <td class="red-text">{{ performance.buystock|normalize_fiat_crypto:asset|intcomma }}</td>
+                  <td class="green-text">{{ performance.sellstock|normalize_fiat_crypto:asset|intcomma }}</td>
+                {% endif %}
+                <td class="green-text">{{ performance.deposit|normalize_fiat_crypto:asset|intcomma }}</td>
+                <td class="red-text">{{ performance.withdrawal|normalize_fiat_crypto:asset|intcomma }}</td>
+
+                {% if performance.interest > 0 %}
+                  <td class="green-text">{{ performance.interest|normalize_fiat_crypto:asset|intcomma }}</td>
+                {% else %}
+                  <td class="red-text">{{ performance.interest|normalize_fiat_crypto:asset|intcomma }}</td>
+                {% endif %}
+                
+                {% if performance.dividend > 0 %}
+                  <td class="green-text">{{ performance.dividend|normalize_fiat_crypto:asset|intcomma }}</td>
+                {% else %}
+                  <td class="red-text">{{ performance.dividend|normalize_fiat_crypto:asset|intcomma }}</td>
+                {% endif %}
+
+                <td class="red-text">{{ performance.deduction|normalize_fiat_crypto:asset|intcomma }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div id='performance-pagination'>
+    <nav aria-label="performance-pagination">
+      <ul class="pagination justify-content-center">
+        <span class="step-links">
+            <li class="page-item same_line_text">    
+              <a class="page-link" href="?page=1&{{ search_parameters_clean }}">&laquo; First</a>
+            </li>
+            {% if transactions_by_currency_page_obj.has_previous %}
+              <li class="page-item same_line_text">    
+                  <a class="page-link same_line_text" href="?page={{ transactions_by_currency_page_obj.previous_page_number }}&{{ search_parameters_clean }}">Previous</a>
+              </li>
+            {% else %}
+              <li class="page-item same_line_text disabled">    
+                <a class="page-link" href="#">Previous</a>
+              </li>
+            {% endif %}
+    
+            <span class="current same_line_text">
+                Page {{ transactions_by_currency_page_obj.number }} of {{ transactions_by_currency_page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if transactions_by_currency_page_obj.has_next %}
+                <li class="page-item same_line_text">
+                  <a class="page-link" href="?page={{ transactions_by_currency_page_obj.next_page_number }}&{{ search_parameters_clean }}">Next</a>
+                </li>
+            {% else %}
+              <li class="page-item same_line_text disabled">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            {% endif %}
+            <li class="page-item same_line_text">
+              <a class="page-link" href="?page={{ transactions_by_currency_page_obj.paginator.num_pages }}&{{ search_parameters_clean }}">Last &raquo;</a>
+            </li>
+        </span>
+      </ul>
+    </nav>
+  </div>
+
+{% endblock %}
